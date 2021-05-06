@@ -1,5 +1,6 @@
 // import important parts of sequelize library
 const { Model, DataTypes } = require('sequelize');
+const { canTreatArrayAsAnd } = require('sequelize/types/lib/utils');
 // import our database connection from config.js
 const sequelize = require('../config/connection');
 
@@ -21,19 +22,26 @@ Product.init(
       allowNull: false,
     },
     price: {
-      type: DataTypes.DECIMAL, // TODO: google decimal syntax
+      type: DataTypes.DECIMAL,
       allowNull: false,
-      //TODO: VALIDATION - DECIMAL = TRUE
+      validate: {
+        isDecimal: true
+      }
     },
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      //TODO: DEFAULT VALUE = 10
-      //TODO: VALIDATION - VALUE = NUMERIC
+      defaultValue: 10,
+      validate: {
+        isNumeric: true
+      }
     },
     category_id: {
       type: DataTypes.INTEGER,
-      //TODO: reference category model's id
+      references: {
+        model: 'category',
+        id: 'id'
+      }
     }
   },
   {
